@@ -78,15 +78,20 @@ def get_data_iterator(config: Config) -> (DataIterator, DataIterator, DataIterat
     return train_iterator, dev_iterator, test_iterator
 
 
-config = create_model_config()
-# config = config.parse_args(known_only=True)
-# 0. Load vocab
-vocab = pickle.load(open(config.vocab_file, 'rb'))
-config.n_vocab = len(vocab)
-# 1. load data iterator
-train_iterator, dev_iterator, test_iterator = get_data_iterator(config)
-model = create_sequence_classification_model(config)
-print(model)
-model = model.to(config.device)
-# train(config, model, train_iterator, dev_iterator, test_iterator)
-test(model, test_iterator, config)
+def main():
+    config = create_model_config()
+    # config = config.parse_args(known_only=True)
+    # 0. Load vocab
+    vocab = pickle.load(open(config.vocab_file, 'rb'))
+    config.n_vocab = len(vocab)
+    # 1. load data iterator
+    train_iterator, dev_iterator, test_iterator = get_data_iterator(config)
+    model = create_sequence_classification_model(config)
+    print(f'Modle Info: \n{model}')
+    model = model.to(config.device)
+    train(config, model, train_iterator, dev_iterator, test_iterator)
+    test(model, test_iterator, config)
+
+
+if __name__ == '__main__':
+    main()
